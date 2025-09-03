@@ -39,7 +39,7 @@ const OverView = () => {
               <p>
                 Leveraging the latest construction technologies and best practices, we ensure 
                 timely delivery and scalable solutions that empower our clients to achieve their 
-                construction goals. Whether you're planning a new residential project or an 
+                construction goals.                 Whether you&apos;re planning a new residential project or an 
                 established business seeking construction services, Garhwa Construction is your 
                 trusted construction partner—dedicated to quality, innovation, and long-term success.
               </p>

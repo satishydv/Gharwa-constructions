@@ -33,7 +33,7 @@ const Nav = ({openNav}:Props) => {
         {/* Button */}
         <div className='flex items-center space-x-4'>
           <button className='bg-yellow-500 px-8 py-2.5 text-white font-bold rounded-lg hover:bg-black transition-all duration-300 cursor-pointer'>
-          Call Now
+          Login
           </button>
           
           {/* Burger Menu */}
