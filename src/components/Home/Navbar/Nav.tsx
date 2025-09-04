@@ -22,7 +22,7 @@ const Nav = ({openNav}:Props) => {
               <Link
               href={link.url}
               key={link.id}
-              className='text-gray-800 hover:text-orange-500 dark:text-white font-semibold transition-all duration-200'
+              className='text-gray-800 hover:text-orange-500 dark:text-white font-bold md:text-[18px] transition-all duration-200'
               >
               {link.label}
               </Link>

@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
+import GalleryModal from './GalleryModal'
 
 const Gallery = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   const galleryImages = [
     "/Gallery/gallery-1.jpg",
     "/Gallery/gallery-2.jpg", 
@@ -12,6 +16,15 @@ const Gallery = () => {
     "/Gallery/gallery-7.webp",
     "/Gallery/gallery-8.jpg"
   ]
+
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -28,7 +41,11 @@ const Gallery = () => {
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {galleryImages.map((image, index) => (
-            <div key={index} className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+            <div 
+              key={index} 
+              className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer"
+              onClick={() => handleImageClick(index)}
+            >
               <div className="aspect-square relative">
                 <Image
                   src={image}
@@ -51,6 +68,14 @@ const Gallery = () => {
           ))}
         </div>
       </div>
+
+      {/* Gallery Modal */}
+      <GalleryModal
+        images={galleryImages}
+        currentImageIndex={selectedImageIndex}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </section>
   )
 }
