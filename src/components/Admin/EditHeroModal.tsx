@@ -57,9 +57,6 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
     setIsUploading(true);
 
     try {
-      // Simulate upload process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       let updatedImage: HeroImage = {
         ...image,
         name: formData.name,
@@ -73,7 +70,7 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
           await deleteOldImage(image.filename);
           
           // 2. Upload the new image with the same filename
-          const newImageUrl = await uploadNewImage(selectedFile, image.filename);
+          const newImageUrl = await uploadNewImage(selectedFile, image.filename, formData.name, formData.alt);
           
           // 3. Update the image with new URL
           updatedImage = {
@@ -92,12 +89,27 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
           setIsUploading(false);
           return;
         }
+      } else {
+        // If no new file selected, just update the database with new name/alt
+        try {
+          await updateImageMetadata(image.filename, formData.name, formData.alt);
+        } catch (error) {
+          console.error('Error updating hero image metadata:', error);
+          alert('Failed to update hero image metadata. Please try again.');
+          setIsUploading(false);
+          return;
+        }
       }
 
       onSave(updatedImage);
       onClose();
+      
+      // Set flag to refresh hero-slider page
+      sessionStorage.setItem('hero-refresh-needed', 'true');
+      
       alert('Hero image updated successfully!');
     } catch (error) {
+      console.error('Update error:', error);
       alert('Update failed. Please try again.');
     } finally {
       setIsUploading(false);
@@ -127,17 +139,45 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
     }
   };
 
+  // Function to update image metadata only
+  const updateImageMetadata = async (filename: string, name: string, alt: string) => {
+    try {
+      const response = await fetch('/api/admin/hero-slider/update-metadata', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename,
+          name,
+          alt
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update hero image metadata');
+      }
+
+      console.log('Hero image metadata updated successfully');
+    } catch (error) {
+      console.error('Error updating hero image metadata:', error);
+      throw error;
+    }
+  };
+
   // Function to upload new image
-  const uploadNewImage = async (file: File, filename: string): Promise<string> => {
+  const uploadNewImage = async (file: File, filename: string, name: string, alt: string): Promise<string> => {
     try {
       // Create a FormData to send the upload request
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('filename', filename); // Use the same filename
+      const uploadFormData = new FormData();
+      uploadFormData.append('image', file);
+      uploadFormData.append('filename', filename); // Use the same filename
+      uploadFormData.append('name', name);
+      uploadFormData.append('alt', alt);
       
       const response = await fetch('/api/admin/hero-slider/upload-image', {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       });
 
       if (!response.ok) {

@@ -1,21 +1,66 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import GalleryModal from './GalleryModal'
+
+interface GalleryImage {
+  id: number;
+  filename: string;
+  name: string;
+  alt_text: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
 const Gallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const galleryImages = [
-    "/Gallery/gallery-1.jpg",
-    "/Gallery/gallery-2.jpg", 
-    "/Gallery/gallery-3.jpg",
-    "/Gallery/gallery-4.jpg",
-    "/Gallery/gallery-5.webp",
-    "/Gallery/gallery-6.webp",
-    "/Gallery/gallery-7.webp",
-    "/Gallery/gallery-8.jpg"
-  ]
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      try {
+        const response = await fetch('/api/gallery-images/')
+        if (response.ok) {
+          const data = await response.json()
+          setGalleryImages(data)
+        } else {
+          console.error('Failed to fetch gallery images')
+          // Fallback to hardcoded images if API fails
+          setGalleryImages([
+            { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+            { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+            { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
+            { id: 4, filename: 'gallery-4.jpg', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+            { id: 5, filename: 'gallery-5.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+            { id: 6, filename: 'gallery-6.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+            { id: 7, filename: 'gallery-7.webp', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' },
+            { id: 8, filename: 'gallery-8.jpg', name: 'Gallery 8', alt_text: 'Gallery image 8', description: '', display_order: 8, is_active: true, created_at: '', updated_at: '' }
+          ])
+        }
+      } catch (error) {
+        console.error('Error fetching gallery images:', error)
+        // Fallback to hardcoded images if API fails
+        setGalleryImages([
+          { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+          { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+          { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
+          { id: 4, filename: 'gallery-4.jpg', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+          { id: 5, filename: 'gallery-5.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+          { id: 6, filename: 'gallery-6.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+          { id: 7, filename: 'gallery-7.webp', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' },
+          { id: 8, filename: 'gallery-8.jpg', name: 'Gallery 8', alt_text: 'Gallery image 8', description: '', display_order: 8, is_active: true, created_at: '', updated_at: '' }
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchGalleryImages()
+  }, [])
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -25,6 +70,27 @@ const Gallery = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
+              Our{' '}
+              <span className="text-yellow-500">Gallery</span>
+            </h2>
+            <div className="w-20 h-1 bg-yellow-500 mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {[...Array(8)].map((_, index) => (
+              <div key={index} className="aspect-square bg-gray-200 animate-pulse rounded-lg"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-16 bg-white">
@@ -42,14 +108,14 @@ const Gallery = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {galleryImages.map((image, index) => (
             <div 
-              key={index} 
+              key={image.id} 
               className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer"
               onClick={() => handleImageClick(index)}
             >
               <div className="aspect-square relative">
                 <Image
-                  src={image}
-                  alt={`Gallery image ${index + 1}`}
+                  src={`/Gallery/${image.filename}`}
+                  alt={image.alt_text}
                   fill
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
                 />
@@ -71,7 +137,7 @@ const Gallery = () => {
 
       {/* Gallery Modal */}
       <GalleryModal
-        images={galleryImages}
+        images={galleryImages.map(img => `/Gallery/${img.filename}`)}
         currentImageIndex={selectedImageIndex}
         isOpen={isModalOpen}
         onClose={handleCloseModal}

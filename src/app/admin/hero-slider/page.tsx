@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EditHeroModal from '@/components/Admin/EditHeroModal';
@@ -16,36 +16,132 @@ interface HeroImage {
 
 export default function AdminHeroSliderPage() {
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
-  const [heroImages, setHeroImages] = useState<HeroImage[]>([
-    {
-      id: 1,
-      name: "Hero Image 1",
-      filename: "Hero.jpg",
-      url: "/Hero/Hero.jpg",
-      alt: "Main hero image",
-      order: 1
-    },
-    {
-      id: 2,
-      name: "Hero Image 2",
-      filename: "hero2.webp",
-      url: "/Hero/hero2.webp",
-      alt: "Secondary hero image",
-      order: 2
-    },
-    {
-      id: 3,
-      name: "Hero Image 3",
-      filename: "hero3.webp",
-      url: "/Hero/hero3.webp",
-      alt: "Tertiary hero image",
-      order: 3
-    }
-  ]);
+  const [heroImages, setHeroImages] = useState<HeroImage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Edit modal state
   const [editingImage, setEditingImage] = useState<HeroImage | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // Fetch hero images from API
+  const fetchHeroImages = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/hero-images');
+      if (response.ok) {
+        const data = await response.json();
+        // Filter out images with empty URLs and add fallback URLs
+        const processedData = data.map((image: any) => ({
+          ...image,
+          url: image.url || `/Hero/${image.filename}`,
+          alt: image.alt || image.name || 'Hero image'
+        })).filter((image: any) => image.filename); // Only include images with filenames
+        
+        setHeroImages(processedData);
+        
+        // Clear browser cache for hero images to show updated versions
+        const timestamp = Date.now();
+        const processedDataWithCacheBust = processedData.map((image: any) => ({
+          ...image,
+          url: image.url + '?v=' + timestamp
+        }));
+        
+        setHeroImages(processedDataWithCacheBust);
+      } else {
+        console.error('Failed to fetch hero images');
+        // Fallback to static data if API fails
+        setHeroImages([
+          {
+            id: 1,
+            name: "Hero Image 1",
+            filename: "Hero.jpg",
+            url: "/Hero/Hero.jpg",
+            alt: "Main hero image",
+            order: 1
+          },
+          {
+            id: 2,
+            name: "Hero Image 2",
+            filename: "hero2.webp",
+            url: "/Hero/hero2.webp",
+            alt: "Secondary hero image",
+            order: 2
+          },
+          {
+            id: 3,
+            name: "Hero Image 3",
+            filename: "hero3.webp",
+            url: "/Hero/hero3.webp",
+            alt: "Tertiary hero image",
+            order: 3
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching hero images:', error);
+      // Use fallback data on error
+      setHeroImages([
+        {
+          id: 1,
+          name: "Hero Image 1",
+          filename: "Hero.jpg",
+          url: "/Hero/Hero.jpg",
+          alt: "Main hero image",
+          order: 1
+        },
+        {
+          id: 2,
+          name: "Hero Image 2",
+          filename: "hero2.webp",
+          url: "/Hero/hero2.webp",
+          alt: "Secondary hero image",
+          order: 2
+        },
+        {
+          id: 3,
+          name: "Hero Image 3",
+          filename: "hero3.webp",
+          url: "/Hero/hero3.webp",
+          alt: "Tertiary hero image",
+          order: 3
+        }
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load images on component mount
+  useEffect(() => {
+    fetchHeroImages();
+  }, []);
+
+  // Refresh images when returning from upload page (using sessionStorage flag)
+  useEffect(() => {
+    const checkForRefresh = () => {
+      const shouldRefresh = sessionStorage.getItem('hero-refresh-needed');
+      if (shouldRefresh === 'true') {
+        sessionStorage.removeItem('hero-refresh-needed');
+        fetchHeroImages();
+      }
+    };
+
+    // Check on mount
+    checkForRefresh();
+
+    // Check when page becomes visible (but only if flag is set)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkForRefresh();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -94,6 +190,8 @@ export default function AdminHeroSliderPage() {
     );
     setIsEditModalOpen(false);
     setEditingImage(null);
+    // Refresh the images list to ensure we have the latest data
+    fetchHeroImages();
   };
 
   const handleCloseEditModal = () => {
@@ -138,6 +236,25 @@ export default function AdminHeroSliderPage() {
             </div>
             <div className="flex items-center space-x-4">
               <button
+                onClick={fetchHeroImages}
+                disabled={isLoading}
+                className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Refresh</span>
+                  </>
+                )}
+              </button>
+              <button
                 onClick={handleDeleteMultiple}
                 disabled={selectedImages.length === 0}
                 className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -156,8 +273,16 @@ export default function AdminHeroSliderPage() {
 
         {/* Hero Images Table */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+          {isLoading ? (
+            <div className="p-8 text-center">
+              <div className="inline-flex items-center space-x-2">
+                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-gray-600">Loading hero images...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
@@ -219,12 +344,18 @@ export default function AdminHeroSliderPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="w-20 h-16 relative rounded-lg overflow-hidden border border-gray-200">
-                        <Image
-                          src={image.url}
-                          alt={image.alt}
-                          fill
-                          className="object-cover"
-                        />
+                        {image.url && image.url.trim() !== '' ? (
+                          <Image
+                            src={image.url}
+                            alt={image.alt || image.name || 'Hero image'}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500 text-xs">No Image</span>
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -247,7 +378,8 @@ export default function AdminHeroSliderPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Summary */}

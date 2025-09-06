@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EditImageModal from '@/components/Admin/EditImageModal';
@@ -15,68 +15,196 @@ interface GalleryImage {
 
 export default function AdminGalleryPage() {
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([
-    {
-      id: 1,
-      name: "Gallery Image 1",
-      filename: "gallery-1.jpg",
-      url: "/Gallery/gallery-1.jpg",
-      alt: "Construction site view"
-    },
-    {
-      id: 2,
-      name: "Gallery Image 2",
-      filename: "gallery-2.jpg",
-      url: "/Gallery/gallery-2.jpg",
-      alt: "Building exterior"
-    },
-    {
-      id: 3,
-      name: "Gallery Image 3",
-      filename: "gallery-3.jpg",
-      url: "/Gallery/gallery-3.jpg",
-      alt: "Interior design"
-    },
-    {
-      id: 4,
-      name: "Gallery Image 4",
-      filename: "gallery-4.jpg",
-      url: "/Gallery/gallery-4.jpg",
-      alt: "Project overview"
-    },
-    {
-      id: 5,
-      name: "Gallery Image 5",
-      filename: "gallery-5.webp",
-      url: "/Gallery/gallery-5.webp",
-      alt: "Construction progress"
-    },
-    {
-      id: 6,
-      name: "Gallery Image 6",
-      filename: "gallery-6.webp",
-      url: "/Gallery/gallery-6.webp",
-      alt: "Final result"
-    },
-    {
-      id: 7,
-      name: "Gallery Image 7",
-      filename: "gallery-7.webp",
-      url: "/Gallery/gallery-7.webp",
-      alt: "Project showcase"
-    },
-    {
-      id: 8,
-      name: "Gallery Image 8",
-      filename: "gallery-8.jpg",
-      url: "/Gallery/gallery-8.jpg",
-      alt: "Completed work"
-    }
-  ]);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Edit modal state
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // Fetch gallery images from API
+  const fetchGalleryImages = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/gallery-images');
+      if (response.ok) {
+        const data = await response.json();
+        // Filter out images with empty URLs and add fallback URLs
+        const processedData = data.map((image: any) => ({
+          ...image,
+          url: image.url || `/Gallery/${image.filename}`,
+          alt: image.alt || image.name || 'Gallery image'
+        })).filter((image: any) => image.filename); // Only include images with filenames
+        
+        setGalleryImages(processedData);
+        
+        // Clear browser cache for gallery images to show updated versions
+        const timestamp = Date.now();
+        const processedDataWithCacheBust = processedData.map((image: any) => ({
+          ...image,
+          url: image.url + '?v=' + timestamp
+        }));
+        
+        setGalleryImages(processedDataWithCacheBust);
+      } else {
+        console.error('Failed to fetch gallery images');
+        // Fallback to static data if API fails
+        setGalleryImages([
+          {
+            id: 1,
+            name: "Gallery Image 1",
+            filename: "gallery-1.jpg",
+            url: "/Gallery/gallery-1.jpg",
+            alt: "Construction site view"
+          },
+          {
+            id: 2,
+            name: "Gallery Image 2",
+            filename: "gallery-2.jpg",
+            url: "/Gallery/gallery-2.jpg",
+            alt: "Building exterior"
+          },
+          {
+            id: 3,
+            name: "Gallery Image 3",
+            filename: "gallery-3.jpg",
+            url: "/Gallery/gallery-3.jpg",
+            alt: "Interior design"
+          },
+          {
+            id: 4,
+            name: "Gallery Image 4",
+            filename: "gallery-4.jpg",
+            url: "/Gallery/gallery-4.jpg",
+            alt: "Project overview"
+          },
+          {
+            id: 5,
+            name: "Gallery Image 5",
+            filename: "gallery-5.webp",
+            url: "/Gallery/gallery-5.webp",
+            alt: "Construction progress"
+          },
+          {
+            id: 6,
+            name: "Gallery Image 6",
+            filename: "gallery-6.webp",
+            url: "/Gallery/gallery-6.webp",
+            alt: "Final result"
+          },
+          {
+            id: 7,
+            name: "Gallery Image 7",
+            filename: "gallery-7.webp",
+            url: "/Gallery/gallery-7.webp",
+            alt: "Project showcase"
+          },
+          {
+            id: 8,
+            name: "Gallery Image 8",
+            filename: "gallery-8.jpg",
+            url: "/Gallery/gallery-8.jpg",
+            alt: "Completed work"
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching gallery images:', error);
+      // Use fallback data on error
+      setGalleryImages([
+        {
+          id: 1,
+          name: "Gallery Image 1",
+          filename: "gallery-1.jpg",
+          url: "/Gallery/gallery-1.jpg",
+          alt: "Construction site view"
+        },
+        {
+          id: 2,
+          name: "Gallery Image 2",
+          filename: "gallery-2.jpg",
+          url: "/Gallery/gallery-2.jpg",
+          alt: "Building exterior"
+        },
+        {
+          id: 3,
+          name: "Gallery Image 3",
+          filename: "gallery-3.jpg",
+          url: "/Gallery/gallery-3.jpg",
+          alt: "Interior design"
+        },
+        {
+          id: 4,
+          name: "Gallery Image 4",
+          filename: "gallery-4.jpg",
+          url: "/Gallery/gallery-4.jpg",
+          alt: "Project overview"
+        },
+        {
+          id: 5,
+          name: "Gallery Image 5",
+          filename: "gallery-5.webp",
+          url: "/Gallery/gallery-5.webp",
+          alt: "Construction progress"
+        },
+        {
+          id: 6,
+          name: "Gallery Image 6",
+          filename: "gallery-6.webp",
+          url: "/Gallery/gallery-6.webp",
+          alt: "Final result"
+        },
+        {
+          id: 7,
+          name: "Gallery Image 7",
+          filename: "gallery-7.webp",
+          url: "/Gallery/gallery-7.webp",
+          alt: "Project showcase"
+        },
+        {
+          id: 8,
+          name: "Gallery Image 8",
+          filename: "gallery-8.jpg",
+          url: "/Gallery/gallery-8.jpg",
+          alt: "Completed work"
+        }
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load images on component mount
+  useEffect(() => {
+    fetchGalleryImages();
+  }, []);
+
+  // Refresh images when returning from upload page (using sessionStorage flag)
+  useEffect(() => {
+    const checkForRefresh = () => {
+      const shouldRefresh = sessionStorage.getItem('gallery-refresh-needed');
+      if (shouldRefresh === 'true') {
+        sessionStorage.removeItem('gallery-refresh-needed');
+        fetchGalleryImages();
+      }
+    };
+
+    // Check on mount
+    checkForRefresh();
+
+    // Check when page becomes visible (but only if flag is set)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkForRefresh();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -125,6 +253,8 @@ export default function AdminGalleryPage() {
     );
     setIsEditModalOpen(false);
     setEditingImage(null);
+    // Refresh the images list to ensure we have the latest data
+    fetchGalleryImages();
   };
 
   const handleCloseEditModal = () => {
@@ -144,6 +274,25 @@ export default function AdminGalleryPage() {
             </div>
             <div className="flex items-center space-x-4">
               <button
+                onClick={fetchGalleryImages}
+                disabled={isLoading}
+                className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Refresh</span>
+                  </>
+                )}
+              </button>
+              <button
                 onClick={handleDeleteMultiple}
                 disabled={selectedImages.length === 0}
                 className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -162,8 +311,16 @@ export default function AdminGalleryPage() {
 
         {/* Gallery Table */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+          {isLoading ? (
+            <div className="p-8 text-center">
+              <div className="inline-flex items-center space-x-2">
+                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-gray-600">Loading gallery images...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
@@ -210,12 +367,18 @@ export default function AdminGalleryPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="w-16 h-16 relative rounded-lg overflow-hidden border border-gray-200">
-                        <Image
-                          src={image.url}
-                          alt={image.alt}
-                          fill
-                          className="object-cover"
-                        />
+                        {image.url && image.url.trim() !== '' ? (
+                          <Image
+                            src={image.url}
+                            alt={image.alt || image.name || 'Gallery image'}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500 text-xs">No Image</span>
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -238,7 +401,8 @@ export default function AdminGalleryPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Summary */}

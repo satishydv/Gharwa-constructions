@@ -2,30 +2,82 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-const Hero = () => {
-  const images = [
-    "/Hero/Hero.jpg",
-    "/Hero/hero2.webp",
-    "/Hero/hero3.webp",
-  ]
+interface HeroImage {
+  id: number;
+  filename: string;
+  name: string;
+  alt_text: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
+const Hero = () => {
+  const [images, setImages] = useState<HeroImage[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, 4500)
-    return () => clearInterval(intervalId)
+    const fetchHeroImages = async () => {
+      try {
+        const response = await fetch('/api/hero-images/')
+        if (response.ok) {
+          const data = await response.json()
+          setImages(data)
+        } else {
+          console.error('Failed to fetch hero images')
+          // Fallback to hardcoded images if API fails
+          setImages([
+            { id: 1, filename: 'Hero.jpg', name: 'Hero 1', alt_text: 'Hero background image', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+            { id: 2, filename: 'hero2.webp', name: 'Hero 2', alt_text: 'Hero background image', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+            { id: 3, filename: 'hero3.webp', name: 'Hero 3', alt_text: 'Hero background image', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
+          ])
+        }
+      } catch (error) {
+        console.error('Error fetching hero images:', error)
+        // Fallback to hardcoded images if API fails
+        setImages([
+          { id: 1, filename: 'Hero.jpg', name: 'Hero 1', alt_text: 'Hero background image', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+          { id: 2, filename: 'hero2.webp', name: 'Hero 2', alt_text: 'Hero background image', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+          { id: 3, filename: 'hero3.webp', name: 'Hero 3', alt_text: 'Hero background image', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchHeroImages()
+  }, [])
+
+  useEffect(() => {
+    if (images.length > 0) {
+      const intervalId = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length)
+      }, 4500)
+      return () => clearInterval(intervalId)
+    }
   }, [images.length])
+
+  if (loading) {
+    return (
+      <div className='relative w-full h-[85vh] md:h-[120vh] bg-gray-200 animate-pulse'>
+        <div className='absolute inset-0 flex items-center justify-center'>
+          <div className='text-gray-500'>Loading hero images...</div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='relative w-full h-[85vh] md:h-[120vh]'>
       <div className='absolute inset-0'>
-        {images.map((src, idx) => (
+        {images.map((image, idx) => (
           <Image
-            key={src}
-            src={src}
-            alt='Hero background image'
+            key={image.id}
+            src={`/Hero/${image.filename}`}
+            alt={image.alt_text}
             fill
             priority={idx === 0}
             className={`object-cover object-center transition-opacity duration-700 ease-in-out ${idx === currentIndex ? 'opacity-100' : 'opacity-0'}`}

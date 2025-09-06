@@ -48,19 +48,21 @@ export default function UploadGalleryPage() {
 
     try {
       // Create FormData for upload
-      const formData = new FormData();
-      formData.append('image', selectedFile);
+      const uploadFormData = new FormData();
+      uploadFormData.append('image', selectedFile);
+      uploadFormData.append('name', formData.name);
+      uploadFormData.append('alt', formData.alt);
       
       // Generate next filename (gallery-X.ext format)
       const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
       const nextNumber = 9; // You can make this dynamic based on existing images
       const filename = `gallery-${nextNumber}.${fileExtension}`;
-      formData.append('filename', filename);
+      uploadFormData.append('filename', filename);
 
       // Upload image using API
       const response = await fetch('/api/admin/gallery/upload-image', {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       });
 
       if (!response.ok) {
@@ -70,6 +72,9 @@ export default function UploadGalleryPage() {
 
       const result = await response.json();
       console.log('Image uploaded successfully:', result);
+      
+      // Set flag to refresh gallery page when returning
+      sessionStorage.setItem('gallery-refresh-needed', 'true');
       
       alert('Image uploaded successfully!');
       router.push('/admin/gallery');

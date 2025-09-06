@@ -34,7 +34,7 @@ const Nav = ({openNav}:Props) => {
         <div className='flex items-center space-x-4'>
           <Link 
             href="/admin/gallery"
-            className='bg-blue-500 px-6 py-2.5 text-white font-bold rounded-lg hover:bg-blue-600 transition-all duration-300 cursor-pointer'
+            className='bg-blue-500 px-6 py-2.5 text-white font-bold rounded-lg hover:bg-blue-600 transition-all duration-300 cursor-pointer hidden md:block'
           >
             Admin
           </Link>

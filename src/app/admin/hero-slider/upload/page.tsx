@@ -104,6 +104,9 @@ export default function UploadHeroSliderPage() {
       
       // Show success message and redirect
       setTimeout(() => {
+        // Set flag to refresh hero-slider page when returning
+        sessionStorage.setItem('hero-refresh-needed', 'true');
+        
         alert('Hero image uploaded successfully!');
         router.push('/admin/hero-slider');
       }, 500);

@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import mysql from 'mysql2/promise';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const image = formData.get('image') as File;
     const filename = formData.get('filename') as string;
+    const name = formData.get('name') as string;
+    const alt = formData.get('alt') as string;
 
     if (!image || !filename) {
       return NextResponse.json(
@@ -55,6 +58,47 @@ export async function POST(request: NextRequest) {
 
     // Return the URL for the uploaded image
     const imageUrl = `/Gallery/${filename}`;
+
+    // Database connection configuration
+    const dbConfig = {
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'gharwa_auth',
+      port: parseInt(process.env.DB_PORT || '3306'),
+    };
+
+    // Update database with image information
+    try {
+      const connection = await mysql.createConnection(dbConfig);
+      
+      // Check if image already exists in database
+      const [existingRows] = await connection.execute(
+        'SELECT id FROM gallery_images WHERE filename = ?',
+        [filename]
+      );
+
+      if (Array.isArray(existingRows) && existingRows.length > 0) {
+        // Update existing record
+        await connection.execute(
+          'UPDATE gallery_images SET name = ?, alt_text = ?, updated_at = NOW() WHERE filename = ?',
+          [name || `Gallery Image ${filename}`, alt || name || `Gallery image`, filename]
+        );
+        console.log(`Updated existing gallery image record for: ${filename}`);
+      } else {
+        // Insert new record
+        const [result] = await connection.execute(
+          'INSERT INTO gallery_images (name, filename, alt_text, is_active, display_order, created_at, updated_at) VALUES (?, ?, ?, 1, (SELECT COALESCE(MAX(display_order), 0) + 1 FROM gallery_images g2), NOW(), NOW())',
+          [name || `Gallery Image ${filename}`, filename, alt || name || `Gallery image`]
+        );
+        console.log(`Inserted new gallery image record for: ${filename}`);
+      }
+      
+      await connection.end();
+    } catch (dbError) {
+      console.error('Database update error:', dbError);
+      // Don't fail the upload if database update fails
+    }
 
     return NextResponse.json(
       { 
