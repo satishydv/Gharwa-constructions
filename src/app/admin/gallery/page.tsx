@@ -263,20 +263,20 @@ export default function AdminGalleryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-32 bg-gray-50 p-6">
+    <div className="min-h-screen lg:pt-10 pt-8 bg-gray-50 p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div>
-              <h1 className="text-3xl font-bold text-blue-600">Gallery Images</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-blue-600">Gallery Images</h1>
               <p className="text-gray-600 mt-2">Manage your gallery images</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={fetchGalleryImages}
                 disabled={isLoading}
-                className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 text-sm lg:text-base"
               >
                 {isLoading ? (
                   <>
@@ -295,13 +295,13 @@ export default function AdminGalleryPage() {
               <button
                 onClick={handleDeleteMultiple}
                 disabled={selectedImages.length === 0}
-                className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-colors text-sm lg:text-base"
               >
-                Delete Multiple Data
+                Delete Multiple
               </button>
               <Link
                 href="/admin/gallery/upload"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 lg:px-6 py-2 rounded-lg font-medium transition-colors text-sm lg:text-base text-center"
               >
                 ADD
               </Link>
@@ -312,7 +312,7 @@ export default function AdminGalleryPage() {
         {/* Gallery Table */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           {isLoading ? (
-            <div className="p-8 text-center">
+            <div className="p-4 lg:p-8 text-center">
               <div className="inline-flex items-center space-x-2">
                 <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-gray-600">Loading gallery images...</span>
@@ -320,10 +320,10 @@ export default function AdminGalleryPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
+              <table className="w-full border-collapse min-w-[600px]">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     <input
                       type="checkbox"
                       checked={selectedImages.length === galleryImages.length}
@@ -331,19 +331,19 @@ export default function AdminGalleryPage() {
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     Image
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     EDIT
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                     DELETE
                   </th>
                 </tr>
@@ -351,7 +351,7 @@ export default function AdminGalleryPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {galleryImages.map((image) => (
                   <tr key={image.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                       <input
                         type="checkbox"
                         checked={selectedImages.includes(image.id)}
@@ -359,14 +359,16 @@ export default function AdminGalleryPage() {
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {image.id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {image.name}
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div className="max-w-[120px] lg:max-w-none truncate">
+                        {image.name}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="w-16 h-16 relative rounded-lg overflow-hidden border border-gray-200">
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
+                      <div className="w-12 h-12 lg:w-16 lg:h-16 relative rounded-lg overflow-hidden border border-gray-200">
                         {image.url && image.url.trim() !== '' ? (
                           <Image
                             src={image.url}
@@ -381,18 +383,18 @@ export default function AdminGalleryPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleEditImage(image.id)}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        className="bg-green-500 hover:bg-green-600 text-white px-2 lg:px-4 py-1 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors"
                       >
                         EDIT
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleDeleteImage(image.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        className="bg-red-500 hover:bg-red-600 text-white px-2 lg:px-4 py-1 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors"
                       >
                         DELETE
                       </button>
@@ -406,7 +408,7 @@ export default function AdminGalleryPage() {
         </div>
 
         {/* Summary */}
-        <div className="mt-4 text-sm text-gray-600">
+        <div className="mt-4 text-sm text-gray-600 text-center lg:text-left">
           Total Images: {galleryImages.length} | Selected: {selectedImages.length}
         </div>
       </div>

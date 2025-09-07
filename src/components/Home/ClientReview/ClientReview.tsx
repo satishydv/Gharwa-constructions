@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ReviewCard from './ReviewCard';
@@ -24,74 +24,114 @@ const responsive = {
   }
 };
 
-const reviewData = [
+// Interface for review data from API
+interface ReviewData {
+    id: number;
+    name: string;
+    subject: string;
+    message: string;
+    rating: number;
+    profile_image: string | null;
+    created_at: string;
+}
+
+const ClientReview = () => {
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch('/api/reviews');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setReviews(data.reviews || []);
+        } else {
+          setError(data.error || 'Failed to fetch reviews');
+        }
+      } catch (err) {
+        setError('Failed to fetch reviews');
+        console.error('Error fetching reviews:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  // Fallback data if no reviews are available
+  const fallbackReviews = [
     {
         id: 1,
         name: "Abhishek Pandey",
-        heading: "Great Service!",
-        review: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
+        subject: "Great Service!",
+        message: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 5,
-        avatar: "/images/c1.png"
+        profile_image: "/images/c1.png",
+        created_at: new Date().toISOString()
     },
     {
         id: 2,
         name: "Shariq Rehan",
-        heading: "Good Experience",
-        review: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
+        subject: "Good Experience",
+        message: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 4,
-        avatar: "/images/c2.png"
+        profile_image: "/images/c2.png",
+        created_at: new Date().toISOString()
     },
     {
         id: 3,
         name: "Pranjal Srivastava",
-        heading: "Highly Recommend",
-        review: "Great company to work with. They are very professional and they have a great team of engineers and architects.",
+        subject: "Highly Recommend",
+        message: "Great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 5,
-        avatar: "/images/c3.png"
-    },
-    {
-        id: 4,
-        name: "Sahil Ansari",
-        heading: "Satisfactory",
-        review: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        rating: 4,
-        avatar: "/images/c1.png"
-    },
-    {
-        id: 5,
-        name: "Nitish Kumar",
-        heading: "Exceptional Quality",
-        review: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-        rating: 5,
-        avatar: "/images/c3.png"
+        profile_image: "/images/c3.png",
+        created_at: new Date().toISOString()
     }
-]
+  ];
 
-const ClientReview = () => {
+  const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
+
+  if (loading) {
+    return (
+      <div className='pt-16 pb-16'>
+        <h1 className='text-xl sm:text-2xl text-center font-extrabold'>What people say about us</h1>
+        <div className='w-[90%] md:w-[70%] mx-auto mt-16 flex justify-center'>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    console.error('Review loading error:', error);
+  }
+
   return (
     <div className='pt-16 pb-16'>
         <h1 className='text-xl sm:text-2xl text-center font-extrabold'>What people say about us</h1>
         <div className='w-[90%] md:w-[70%] mx-auto mt-16 '>
             <Carousel
-  showDots={false}
-  responsive={responsive}
-//   ssr={true}
-  infinite={true}
-  autoPlay={true}
-  autoPlaySpeed={4000}
->
-    {reviewData.map((review) => (
-        <ReviewCard
-        key={review.id}
-        name={review.name}
-        heading={review.heading}
-        review={review.review}
-        rating={review.rating}
-        avatar={review.avatar}
-        />
-
-    ))}
-</Carousel>
+              showDots={false}
+              responsive={responsive}
+              infinite={displayReviews.length > 3}
+              autoPlay={displayReviews.length > 1}
+              autoPlaySpeed={4000}
+            >
+                {displayReviews.map((review) => (
+                    <ReviewCard
+                        key={review.id}
+                        name={review.name}
+                        heading={review.subject || 'Review'}
+                        review={review.message}
+                        rating={review.rating}
+                        avatar={review.profile_image || '/images/c1.png'}
+                    />
+                ))}
+            </Carousel>
         </div>
     </div>
   )

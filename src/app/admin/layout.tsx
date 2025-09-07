@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { FcGallery } from "react-icons/fc";
 import { MdReviews } from "react-icons/md";
 import { TfiLayoutSlider } from "react-icons/tfi";
@@ -16,6 +16,7 @@ import {
   LogOut,
   User
 } from "lucide-react";
+import Logo from '@/components/Helper/Logo';
 
 interface SidebarItem {
   title: string;
@@ -96,7 +97,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
-      <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
+      <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
@@ -105,43 +106,43 @@ export default function AdminLayout({
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 p-0">
+              <SheetContent side="left" className="w-20 p-0">
+                <SheetTitle className="sr-only">Admin Navigation Menu</SheetTitle>
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between p-4 border-b">
-                    <h2 className="text-lg font-semibold text-gray-900">Admin Panel</h2>
-                    <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
+                  <div className="flex items-center justify-center p-4 border-b">
+                    <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)} className="p-2">
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
-                  <ScrollArea className="flex-1 px-3 py-4">
+                  <ScrollArea className="flex-1 px-2 py-4">
                     <nav className="space-y-2">
                       {sidebarItems.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsSidebarOpen(false)}
-                          className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          className={`flex items-center justify-center rounded-lg p-3 text-sm font-medium transition-colors ${
                             pathname === item.href
                               ? 'bg-orange-500 text-white'
                               : 'text-gray-700 hover:bg-gray-100'
                           }`}
+                          title={item.title}
                         >
                           <span className={`${pathname === item.href ? 'text-white' : 'text-gray-500'}`}>
                             {item.icon}
                           </span>
-                          <span>{item.title}</span>
                         </Link>
                       ))}
                     </nav>
                   </ScrollArea>
-                  <div className="p-4 border-t">
+                  <div className="p-2 border-t">
                     <Button
                       onClick={handleLogout}
                       variant="outline"
-                      className="w-full justify-start space-x-3 text-red-600 border-red-200 hover:bg-red-50"
+                      className="w-full justify-center p-3 text-red-600 border-red-200 hover:bg-red-50"
+                      title="Logout"
                     >
                       <LogOut className="h-4 w-4" />
-                      <span>Logout</span>
                     </Button>
                   </div>
                 </div>
@@ -167,14 +168,20 @@ export default function AdminLayout({
         </div>
       </header>
 
+      {/* Mobile Content */}
+      <main className="lg:hidden pt-16">
+        {children}
+      </main>
+
       {/* Desktop Layout */}
       <div className="hidden lg:flex h-screen">
         {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-gray-200">
-            <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-            <p className="text-sm text-gray-500 mt-1">Manage your website</p>
+          <div className="p-4 border-b border-gray-200">
+            <Logo />
+            {/* <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
+            <p className="text-sm text-gray-500 mt-1">Manage your website</p> */}
           </div>
 
           {/* Sidebar Navigation */}

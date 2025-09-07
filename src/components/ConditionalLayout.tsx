@@ -18,6 +18,16 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
     return <>{children}</>;
   }
   
+  // If on admin pages, render nav but no footer or social bar
+  if (pathname.startsWith('/admin')) {
+    return (
+      <>
+        {/* <ResponsiveNav/> */}
+        {children}
+      </>
+    );
+  }
+  
   // For all other pages, render the full layout with nav, footer, and social bar
   return (
     <>
