@@ -119,12 +119,20 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
   // Function to delete old image file
   const deleteOldImage = async (filename: string) => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in again.');
+      }
+
       // Create a FormData to send the delete request
       const formData = new FormData();
       formData.append('filename', filename);
       
       const response = await fetch('/api/admin/hero-slider/delete-image', {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -142,9 +150,15 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
   // Function to update image metadata only
   const updateImageMetadata = async (filename: string, name: string, alt: string) => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in again.');
+      }
+
       const response = await fetch('/api/admin/hero-slider/update-metadata', {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -168,15 +182,24 @@ export default function EditHeroModal({ image, isOpen, onClose, onSave }: EditHe
   // Function to upload new image
   const uploadNewImage = async (file: File, filename: string, name: string, alt: string): Promise<string> => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in again.');
+      }
+
       // Create a FormData to send the upload request
       const uploadFormData = new FormData();
       uploadFormData.append('image', file);
-      uploadFormData.append('filename', filename); // Use the same filename
+      uploadFormData.append('imageId', image.id.toString()); // Send image ID for replacement
+      uploadFormData.append('originalFilename', filename); // Send original filename for replacement
       uploadFormData.append('name', name);
       uploadFormData.append('alt', alt);
       
       const response = await fetch('/api/admin/hero-slider/upload-image', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: uploadFormData,
       });
 

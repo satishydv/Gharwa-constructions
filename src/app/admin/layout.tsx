@@ -62,16 +62,38 @@ export default function AdminLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState<{ username: string; email: string } | null>(null);
 
   useEffect(() => {
-    // Check if user is logged in
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      router.push('/login');
-    }
-    setIsLoading(false);
+    const checkAuthAndFetchUser = async () => {
+      // Check if user is logged in
+      const token = localStorage.getItem('token');
+      if (token) {
+        setIsAuthenticated(true);
+        
+        // Fetch user information
+        try {
+          const response = await fetch('/api/auth/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
+        router.push('/login');
+      }
+      setIsLoading(false);
+    };
+
+    checkAuthAndFetchUser();
   }, [router]);
 
   const handleLogout = () => {
@@ -153,7 +175,7 @@ export default function AdminLayout({
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <User className="h-4 w-4" />
-              <span>Admin</span>
+              <span>{user ? user.username : 'Admin'}</span>
             </div>
             <Button
               onClick={handleLogout}
@@ -178,7 +200,7 @@ export default function AdminLayout({
         {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
           {/* Sidebar Header */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-7 border-b border-gray-300">
             <Logo />
             {/* <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
             <p className="text-sm text-gray-500 mt-1">Manage your website</p> */}
@@ -228,7 +250,9 @@ export default function AdminLayout({
                 <User className="h-4 w-4 text-white" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">Admin User</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {user ? user.username : 'Loading...'}
+                </p>
                 <p className="text-xs text-gray-500">Administrator</p>
               </div>
             </div>

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function UploadGalleryPage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     alt: '',
@@ -23,6 +24,9 @@ export default function UploadGalleryPage() {
       const reader = new FileReader();
       reader.onload = () => {
         setPreview(reader.result as string);
+      };
+      reader.onerror = () => {
+        console.error('Error reading file');
       };
       reader.readAsDataURL(file);
     }
@@ -52,16 +56,20 @@ export default function UploadGalleryPage() {
       uploadFormData.append('image', selectedFile);
       uploadFormData.append('name', formData.name);
       uploadFormData.append('alt', formData.alt);
-      
-      // Generate next filename (gallery-X.ext format)
-      const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
-      const nextNumber = 9; // You can make this dynamic based on existing images
-      const filename = `gallery-${nextNumber}.${fileExtension}`;
-      uploadFormData.append('filename', filename);
+
+      // Get authentication token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Authentication required. Please log in again.');
+        return;
+      }
 
       // Upload image using API
       const response = await fetch('/api/admin/gallery/upload-image', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: uploadFormData,
       });
 
@@ -87,23 +95,34 @@ export default function UploadGalleryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-32 bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-600">Upload New Image</h1>
-              <p className="text-gray-600 mt-2">Add a new image to your gallery</p>
-            </div>
+    <div>
+      {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
+      <div className="hidden lg:block bg-gray-50 fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Upload New Image</h1>
+        <p className="text-gray-600">Add a new image to your gallery</p>
+      </div>
+
+      {/* Mobile Header - visible only on mobile */}
+      <div className="lg:hidden p-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Upload New Image</h1>
+        <p className="text-gray-600">Add a new image to your gallery</p>
+      </div>
+
+      {/* Main Content with responsive top padding */}
+      <div className="pt-6 lg:pt-32 p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <div className="mb-6">
             <Link
               href="/admin/gallery"
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center space-x-2"
             >
-              Back to Gallery
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span>Back to Gallery</span>
             </Link>
           </div>
-        </div>
 
         {/* Upload Form */}
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -115,6 +134,7 @@ export default function UploadGalleryPage() {
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   onChange={handleFileSelect}
@@ -122,9 +142,11 @@ export default function UploadGalleryPage() {
                   id="image-upload"
                   required
                 />
-                <label
-                  htmlFor="image-upload"
+                <div
                   className="cursor-pointer block"
+                  onClick={() => {
+                    fileInputRef.current?.click();
+                  }}
                 >
                   {preview ? (
                     <div className="space-y-4">
@@ -156,7 +178,7 @@ export default function UploadGalleryPage() {
                       </div>
                     </div>
                   )}
-                </label>
+                </div>
               </div>
             </div>
 
@@ -245,6 +267,7 @@ export default function UploadGalleryPage() {
             <li>• Recommended dimensions: 800x600 or larger</li>
             <li>• Images will be automatically renamed to gallery-X format</li>
           </ul>
+        </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
+import jwt from 'jsonwebtoken';
 
 // Database connection configuration
 const dbConfig = {
@@ -10,8 +11,38 @@ const dbConfig = {
   port: parseInt(process.env.DB_PORT || '3306'),
 };
 
+// JWT secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this';
+
+// Helper function to verify admin token
+async function verifyAdminToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+
+  const token = authHeader.substring(7);
+  
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    return decoded;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
+    // Verify admin authentication
+    const decoded = await verifyAdminToken(request);
+    if (!decoded) {
+      return NextResponse.json(
+        { error: 'Unauthorized access' },
+        { status: 401 }
+      );
+    }
+
     const { filename, name, alt } = await request.json();
 
     if (!filename || !name || !alt) {

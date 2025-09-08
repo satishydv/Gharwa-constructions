@@ -222,18 +222,78 @@ export default function AdminGalleryPage() {
     }
   };
 
-  const handleDeleteMultiple = () => {
+  const handleDeleteMultiple = async () => {
     if (selectedImages.length === 0) return;
     
     if (confirm(`Are you sure you want to delete ${selectedImages.length} selected images?`)) {
-      setGalleryImages(prev => prev.filter(img => !selectedImages.includes(img.id)));
-      setSelectedImages([]);
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('Authentication required. Please log in again.');
+          return;
+        }
+
+        // Delete each selected image
+        const deletePromises = selectedImages.map(async (id) => {
+          const response = await fetch(`/api/admin/gallery?id=${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete image');
+          }
+
+          return id;
+        });
+
+        await Promise.all(deletePromises);
+        
+        // Update local state only after successful deletion
+        setGalleryImages(prev => prev.filter(img => !selectedImages.includes(img.id)));
+        setSelectedImages([]);
+        
+        alert(`${selectedImages.length} images deleted successfully!`);
+      } catch (error) {
+        console.error('Error deleting images:', error);
+        alert(`Error deleting images: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
-  const handleDeleteImage = (id: number) => {
+  const handleDeleteImage = async (id: number) => {
     if (confirm('Are you sure you want to delete this image?')) {
-      setGalleryImages(prev => prev.filter(img => img.id !== id));
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('Authentication required. Please log in again.');
+          return;
+        }
+
+        const response = await fetch(`/api/admin/gallery?id=${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          // Update local state only after successful deletion
+          setGalleryImages(prev => prev.filter(img => img.id !== id));
+          alert('Image deleted successfully!');
+        } else {
+          const errorData = await response.json();
+          alert(`Error deleting image: ${errorData.error || 'Unknown error'}`);
+        }
+      } catch (error) {
+        console.error('Error deleting image:', error);
+        alert(`Error deleting image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
@@ -263,15 +323,25 @@ export default function AdminGalleryPage() {
   };
 
   return (
-    <div className="min-h-screen lg:pt-10 pt-8 bg-gray-50 p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-            <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-blue-600">Gallery Images</h1>
-              <p className="text-gray-600 mt-2">Manage your gallery images</p>
-            </div>
+    <div>
+      {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
+      <div className="hidden lg:block bg-gray-50 fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Gallery Images</h1>
+        <p className="text-gray-600">Manage your gallery images</p>
+      </div>
+
+      {/* Mobile Header - visible only on mobile */}
+      <div className="lg:hidden p-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Gallery Images</h1>
+        <p className="text-gray-600">Manage your gallery images</p>
+      </div>
+
+      {/* Main Content with responsive top padding */}
+      <div className="pt-6 lg:pt-32 p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Action Buttons Section */}
+          <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-end space-y-4 lg:space-y-0">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={fetchGalleryImages}
@@ -407,9 +477,10 @@ export default function AdminGalleryPage() {
           )}
         </div>
 
-        {/* Summary */}
-        <div className="mt-4 text-sm text-gray-600 text-center lg:text-left">
-          Total Images: {galleryImages.length} | Selected: {selectedImages.length}
+          {/* Summary */}
+          <div className="mt-4 text-sm text-gray-600 text-center lg:text-left">
+            Total Images: {galleryImages.length} | Selected: {selectedImages.length}
+          </div>
         </div>
       </div>
 

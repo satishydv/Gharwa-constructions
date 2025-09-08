@@ -20,7 +20,6 @@ interface DashboardStats {
   totalGalleryImages: number;
   totalHeroImages: number;
 }
-
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats>({
     totalReviews: 0,
@@ -71,7 +70,7 @@ export default function DashboardPage() {
         if (galleryResponse.ok) {
           setStats(prev => ({
             ...prev,
-            totalGalleryImages: galleryData.images?.length || 0
+            totalGalleryImages: Array.isArray(galleryData) ? galleryData.length : 0
           }));
         }
 
@@ -81,7 +80,7 @@ export default function DashboardPage() {
         if (heroResponse.ok) {
           setStats(prev => ({
             ...prev,
-            totalHeroImages: heroData.images?.length || 0
+            totalHeroImages: Array.isArray(heroData) ? heroData.length : 0
           }));
         }
 
@@ -100,42 +99,42 @@ export default function DashboardPage() {
       title: 'Total Reviews',
       value: stats.totalReviews,
       icon: MessageSquare,
-      color: 'text-blue-600 bg-blue-100',
+      gradient: 'bg-gradient-to-r from-pink-500 to-rose-500',
       description: 'All submitted reviews'
     },
     {
       title: 'Active Reviews',
       value: stats.activeReviews,
       icon: Eye,
-      color: 'text-green-600 bg-green-100',
+      gradient: 'bg-gradient-to-r from-lime-400 to-lime-500',
       description: 'Currently displayed'
     },
     {
       title: 'Pending Reviews',
       value: stats.pendingReviews,
       icon: Clock,
-      color: 'text-yellow-600 bg-yellow-100',
+      gradient: 'from-orange-500 to-yellow-500',
       description: 'Awaiting approval'
     },
     {
       title: 'Average Rating',
       value: stats.averageRating,
       icon: Star,
-      color: 'text-orange-600 bg-orange-100',
+      gradient: 'from-blue-500 to-blue-700',
       description: 'Out of 5 stars'
     },
     {
       title: 'Gallery Images',
       value: stats.totalGalleryImages,
       icon: ImageIcon,
-      color: 'text-purple-600 bg-purple-100',
+      gradient: 'from-indigo-500 to-purple-500',
       description: 'Total uploaded'
     },
     {
-      title: 'Hero Images',
+      title: 'Hero Slider',
       value: stats.totalHeroImages,
       icon: Sliders,
-      color: 'text-indigo-600 bg-indigo-100',
+      gradient: 'from-teal-500 to-cyan-500',
       description: 'Slider images'
     }
   ];
@@ -154,25 +153,34 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-8">
+    <div>
+      {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
+      <div className="hidden lg:block bg-gray-50  fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
+        <h1 className="text-3xl font-bold text-orange-500 mb-2">Dashboard</h1>
+        <p className="text-gray-600">welcome to your admin dashboard. Here's an overview of your website content.</p>
+      </div>
+
+      {/* Mobile Header - visible only on mobile */}
+      <div className="lg:hidden p-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
         <p className="text-gray-600">Welcome to your admin dashboard. Here's an overview of your website content.</p>
       </div>
 
+      {/* Main Content with responsive top padding */}
+      <div className="pt-6 lg:pt-32 p-6">
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <div key={index} className={`bg-gradient-to-r ${stat.gradient} rounded-lg p-6 hover:shadow-lg transition-shadow text-white`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-xs text-gray-500 mt-1">{stat.description}</p>
+                <p className="text-sm font-medium text-white/90 mb-1">{stat.title}</p>
+                <p className="text-3xl font-semibold text-white">{stat.value}</p>
+                <p className="text-xs text-white/80 mt-1">{stat.description}</p>
               </div>
-              <div className={`p-3 rounded-full ${stat.color}`}>
-                <stat.icon className="w-6 h-6" />
+              <div className="p-3 rounded-full bg-white/20">
+                <stat.icon className="w-6 h-6 text-gray-200 " />
               </div>
             </div>
           </div>
@@ -180,14 +188,14 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="rounded-lg border border-gray-200 p-6 bg-gray-100">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <a
             href="/admin/reviews"
-            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors bg-blue-50"
           >
-            <MessageSquare className="w-8 h-8 text-blue-600 mr-3" />
+            <MessageSquare className="w-8 h-8 text-yellow-500 mr-3" />
             <div>
               <h3 className="font-medium text-gray-900">Manage Reviews</h3>
               <p className="text-sm text-gray-600">Approve or reject customer reviews</p>
@@ -196,9 +204,9 @@ export default function DashboardPage() {
           
           <a
             href="/admin/gallery"
-            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors bg-blue-50"
           >
-            <ImageIcon className="w-8 h-8 text-purple-600 mr-3" />
+            <ImageIcon className="w-8 h-8 text-yellow-500 mr-3" />
             <div>
               <h3 className="font-medium text-gray-900">Gallery Management</h3>
               <p className="text-sm text-gray-600">Upload and organize gallery images</p>
@@ -207,9 +215,9 @@ export default function DashboardPage() {
           
           <a
             href="/admin/hero-slider"
-            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors bg-blue-50"
           >
-            <Sliders className="w-8 h-8 text-indigo-600 mr-3" />
+            <Sliders className="w-8 h-8 mr-3 text-yellow-500" />
             <div>
               <h3 className="font-medium text-gray-900">Hero Slider</h3>
               <p className="text-sm text-gray-600">Manage homepage slider images</p>
@@ -226,6 +234,7 @@ export default function DashboardPage() {
           <p className="text-gray-600">Recent activity will be displayed here</p>
           <p className="text-sm text-gray-500 mt-2">This feature will show recent reviews, uploads, and other activities</p>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -227,12 +227,21 @@ export default function ReviewsPage() {
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Review Management</h1>
+    <div>
+      {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
+      <div className="hidden lg:block bg-gray-50 fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Review Management</h1>
         <p className="text-gray-600">Manage customer reviews and testimonials</p>
       </div>
+
+      {/* Mobile Header - visible only on mobile */}
+      <div className="lg:hidden p-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Review Management</h1>
+        <p className="text-gray-600">Manage customer reviews and testimonials</p>
+      </div>
+
+      {/* Main Content with responsive top padding */}
+      <div className="pt-6 lg:pt-32 p-6">
 
       {/* Error Message */}
       {error && (
@@ -451,6 +460,7 @@ export default function ReviewsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

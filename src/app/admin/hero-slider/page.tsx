@@ -159,18 +159,78 @@ export default function AdminHeroSliderPage() {
     }
   };
 
-  const handleDeleteMultiple = () => {
+  const handleDeleteMultiple = async () => {
     if (selectedImages.length === 0) return;
     
     if (confirm(`Are you sure you want to delete ${selectedImages.length} selected hero images?`)) {
-      setHeroImages(prev => prev.filter(img => !selectedImages.includes(img.id)));
-      setSelectedImages([]);
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('Authentication required. Please log in again.');
+          return;
+        }
+
+        // Delete each selected image
+        const deletePromises = selectedImages.map(async (id) => {
+          const response = await fetch(`/api/admin/hero-slider?id=${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete hero image');
+          }
+
+          return id;
+        });
+
+        await Promise.all(deletePromises);
+        
+        // Update local state only after successful deletion
+        setHeroImages(prev => prev.filter(img => !selectedImages.includes(img.id)));
+        setSelectedImages([]);
+        
+        alert(`${selectedImages.length} hero images deleted successfully!`);
+      } catch (error) {
+        console.error('Error deleting hero images:', error);
+        alert(`Error deleting hero images: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
-  const handleDeleteImage = (id: number) => {
+  const handleDeleteImage = async (id: number) => {
     if (confirm('Are you sure you want to delete this hero image?')) {
-      setHeroImages(prev => prev.filter(img => img.id !== id));
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('Authentication required. Please log in again.');
+          return;
+        }
+
+        const response = await fetch(`/api/admin/hero-slider?id=${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          // Update local state only after successful deletion
+          setHeroImages(prev => prev.filter(img => img.id !== id));
+          alert('Hero image deleted successfully!');
+        } else {
+          const errorData = await response.json();
+          alert(`Error deleting hero image: ${errorData.error || 'Unknown error'}`);
+        }
+      } catch (error) {
+        console.error('Error deleting hero image:', error);
+        alert(`Error deleting hero image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
@@ -225,15 +285,25 @@ export default function AdminHeroSliderPage() {
   };
 
   return (
-    <section className="pt-32 pb-16 min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        {/* Header Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-600">Hero Slider Images</h1>
-              <p className="text-gray-600 mt-2">Manage your hero section slider images</p>
-            </div>
+    <div>
+      {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
+      <div className="hidden lg:block bg-gray-50 fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Hero Slider Images</h1>
+        <p className="text-gray-600">Manage your hero section slider images</p>
+      </div>
+
+      {/* Mobile Header - visible only on mobile */}
+      <div className="lg:hidden p-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Hero Slider Images</h1>
+        <p className="text-gray-600">Manage your hero section slider images</p>
+      </div>
+
+      {/* Main Content with responsive top padding */}
+      <div className="pt-6 lg:pt-32 p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Action Buttons Section */}
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex items-center justify-end">
             <div className="flex items-center space-x-4">
               <button
                 onClick={fetchHeroImages}
@@ -387,15 +457,16 @@ export default function AdminHeroSliderPage() {
           Total Hero Images: {heroImages.length} | Selected: {selectedImages.length}
         </div>
 
-        {/* Info Box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Hero Slider Information:</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• <strong>Order matters:</strong> Images are displayed in the order shown above</li>
-            <li>• <strong>Use arrows:</strong> Click ↑↓ to reorder images</li>
-            <li>• <strong>Edit images:</strong> Replace hero images while keeping the same filename</li>
-            <li>• <strong>Delete images:</strong> Remove images from the slider</li>
-          </ul>
+          {/* Info Box */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+            <h3 className="text-sm font-medium text-blue-800 mb-2">Hero Slider Information:</h3>
+            <ul className="text-sm text-blue-700 space-y-1">
+              <li>• <strong>Order matters:</strong> Images are displayed in the order shown above</li>
+              <li>• <strong>Use arrows:</strong> Click ↑↓ to reorder images</li>
+              <li>• <strong>Edit images:</strong> Replace hero images while keeping the same filename</li>
+              <li>• <strong>Delete images:</strong> Remove images from the slider</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -408,6 +479,6 @@ export default function AdminHeroSliderPage() {
           onSave={handleSaveEdit}
         />
       )}
-    </section>
+    </div>
   );
 }
