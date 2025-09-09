@@ -98,7 +98,7 @@ export default function AdminLayout({
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    router.push('/login');
+    router.push('/');
   };
 
   if (isLoading) {
@@ -128,43 +128,59 @@ export default function AdminLayout({
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-20 p-0">
+              <SheetContent side="left" className="w-64 p-0">
                 <SheetTitle className="sr-only">Admin Navigation Menu</SheetTitle>
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-center p-4 border-b">
+                  <div className="flex items-center justify-between p-4 border-b">
+                    <h2 className="text-lg font-semibold text-gray-900">Admin Panel</h2>
                     <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)} className="p-2">
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
-                  <ScrollArea className="flex-1 px-2 py-4">
+                  <ScrollArea className="flex-1 px-3 py-4">
                     <nav className="space-y-2">
                       {sidebarItems.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsSidebarOpen(false)}
-                          className={`flex items-center justify-center rounded-lg p-3 text-sm font-medium transition-colors ${
+                          className={`group flex items-center space-x-3 rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 ${
                             pathname === item.href
-                              ? 'bg-orange-500 text-white'
-                              : 'text-gray-700 hover:bg-gray-100'
+                              ? 'bg-orange-500 text-white shadow-md'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                           }`}
-                          title={item.title}
                         >
-                          <span className={`${pathname === item.href ? 'text-white' : 'text-gray-500'}`}>
+                          <span className={`transition-colors duration-200 ${
+                            pathname === item.href 
+                              ? 'text-white' 
+                              : 'text-gray-500 group-hover:text-gray-700'
+                          }`}>
                             {item.icon}
                           </span>
+                          <div className="flex-1">
+                            <span className="block">{item.title}</span>
+                            {item.description && (
+                              <span className={`block text-xs mt-0.5 ${
+                                pathname === item.href 
+                                  ? 'text-orange-100' 
+                                  : 'text-gray-400 group-hover:text-gray-500'
+                              }`}>
+                                {item.description}
+                              </span>
+                            )}
+                          </div>
                         </Link>
                       ))}
                     </nav>
                   </ScrollArea>
-                  <div className="p-2 border-t">
+                  <div className="p-3 border-t">
                     <Button
                       onClick={handleLogout}
                       variant="outline"
-                      className="w-full justify-center p-3 text-red-600 border-red-200 hover:bg-red-50"
-                      title="Logout"
+                      className="w-full justify-start space-x-3 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
                     >
                       <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
                     </Button>
                   </div>
                 </div>
