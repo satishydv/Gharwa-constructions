@@ -15,16 +15,17 @@ export async function GET() {
     const connection = await mysql.createConnection(dbConfig);
     
     const [rows] = await connection.execute(
-      'SELECT * FROM gallery_images WHERE is_active = true ORDER BY display_order ASC'
+      'SELECT * FROM gallery_images WHERE is_active = 1 ORDER BY display_order ASC'
     );
     
     await connection.end();
     
-    // Add URL field to each image based on filename
+    // Add URL field to each image based on filename and convert boolean fields
     const imagesWithUrl = Array.isArray(rows) ? rows.map((image: any) => ({
       ...image,
       url: `/Gallery/${image.filename}`,
-      alt: image.alt_text || image.name || 'Gallery image'
+      alt: image.alt_text || image.name || 'Gallery image',
+      is_active: Boolean(image.is_active) // Convert 1/0 to true/false
     })) : [];
     
     return NextResponse.json(imagesWithUrl);

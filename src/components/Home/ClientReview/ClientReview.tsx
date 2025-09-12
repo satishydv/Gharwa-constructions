@@ -112,7 +112,7 @@ const ClientReview = () => {
 
   return (
     <div className='pt-16 pb-16'>
-        <h1 className='text-xl sm:text-2xl text-center font-extrabold'>What people say about us</h1>
+        <h1 className='text-xl sm:text-2xl md:text-4xl text-center text-orange-500 font-extrabold'>What people say about us</h1>
         <div className='w-[90%] md:w-[70%] mx-auto mt-16 '>
             <Carousel
               showDots={false}

@@ -18,7 +18,7 @@ const OverView = () => {
             {/* Blue accent line */}
             <div className="w-20 h-1 bg-yellow-500 mb-8"></div>
             
-            <div className="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed">
+            <div className="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed text-justify">
               <p>
                 <span className="text-yellow-500 font-semibold">Gharwa Development</span> is a leading 
                 construction company committed to delivering comprehensive building solutions and services. 

@@ -119,7 +119,7 @@ const ServicesPage = () => {
               </h3>
               
               {/* Description */}
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="text-gray-600 mb-6 leading-relaxed text-justify">
                 {service.description}
               </p>
               

@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaFacebook, FaInstagram, FaWhatsapp, FaTwitter, FaYoutube } from 'react-icons/fa'
-import { MdMapsHomeWork } from 'react-icons/md'
+import Image from 'next/image'
 
 const Footer = () => {
   return (
@@ -10,7 +10,13 @@ const Footer = () => {
             <div>
                 <div className='flex items-center space-x-2'>
                     <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center flex-col'>
-                        <MdMapsHomeWork className='h-6 w-6 text-black'/>
+                        <Image 
+                          src="/icon.png" 
+                          alt="Gharwa Development Logo" 
+                          width={24} 
+                          height={24}
+                          className="h-6 w-6"
+                        />
                     </div>
                     <h1 className='text-xl hidden sm:block md:text-2xl text-white font-bold'>Gharwa Development</h1>
                    

@@ -33,12 +33,7 @@ const Gallery = () => {
           setGalleryImages([
             { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
             { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-            { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
-            { id: 4, filename: 'gallery-4.jpg', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
-            { id: 5, filename: 'gallery-5.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
-            { id: 6, filename: 'gallery-6.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
-            { id: 7, filename: 'gallery-7.webp', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' },
-            { id: 8, filename: 'gallery-8.jpg', name: 'Gallery 8', alt_text: 'Gallery image 8', description: '', display_order: 8, is_active: true, created_at: '', updated_at: '' }
+            { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
           ])
         }
       } catch (error) {
@@ -47,12 +42,7 @@ const Gallery = () => {
         setGalleryImages([
           { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
           { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-          { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
-          { id: 4, filename: 'gallery-4.jpg', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
-          { id: 5, filename: 'gallery-5.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
-          { id: 6, filename: 'gallery-6.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
-          { id: 7, filename: 'gallery-7.webp', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' },
-          { id: 8, filename: 'gallery-8.jpg', name: 'Gallery 8', alt_text: 'Gallery image 8', description: '', display_order: 8, is_active: true, created_at: '', updated_at: '' }
+          { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
         ])
       } finally {
         setLoading(false)

@@ -457,16 +457,7 @@ export default function AdminHeroSliderPage() {
           Total Hero Images: {heroImages.length} | Selected: {selectedImages.length}
         </div>
 
-          {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-            <h3 className="text-sm font-medium text-blue-800 mb-2">Hero Slider Information:</h3>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>• <strong>Order matters:</strong> Images are displayed in the order shown above</li>
-              <li>• <strong>Use arrows:</strong> Click ↑↓ to reorder images</li>
-              <li>• <strong>Edit images:</strong> Replace hero images while keeping the same filename</li>
-              <li>• <strong>Delete images:</strong> Remove images from the slider</li>
-            </ul>
-          </div>
+          
         </div>
       </div>
 

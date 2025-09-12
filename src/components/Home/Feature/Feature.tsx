@@ -67,7 +67,7 @@ const Feature = () => {
                 {service.title}
               </h3>
               
-              <p className="text-gray-600 text-center leading-relaxed">
+              <p className="text-gray-600 leading-relaxed text-center">
                 {service.description}
               </p>
             </div>

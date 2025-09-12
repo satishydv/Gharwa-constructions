@@ -70,41 +70,6 @@ export default function AdminGalleryPage() {
             filename: "gallery-3.jpg",
             url: "/Gallery/gallery-3.jpg",
             alt: "Interior design"
-          },
-          {
-            id: 4,
-            name: "Gallery Image 4",
-            filename: "gallery-4.jpg",
-            url: "/Gallery/gallery-4.jpg",
-            alt: "Project overview"
-          },
-          {
-            id: 5,
-            name: "Gallery Image 5",
-            filename: "gallery-5.webp",
-            url: "/Gallery/gallery-5.webp",
-            alt: "Construction progress"
-          },
-          {
-            id: 6,
-            name: "Gallery Image 6",
-            filename: "gallery-6.webp",
-            url: "/Gallery/gallery-6.webp",
-            alt: "Final result"
-          },
-          {
-            id: 7,
-            name: "Gallery Image 7",
-            filename: "gallery-7.webp",
-            url: "/Gallery/gallery-7.webp",
-            alt: "Project showcase"
-          },
-          {
-            id: 8,
-            name: "Gallery Image 8",
-            filename: "gallery-8.jpg",
-            url: "/Gallery/gallery-8.jpg",
-            alt: "Completed work"
           }
         ]);
       }
@@ -132,41 +97,6 @@ export default function AdminGalleryPage() {
           filename: "gallery-3.jpg",
           url: "/Gallery/gallery-3.jpg",
           alt: "Interior design"
-        },
-        {
-          id: 4,
-          name: "Gallery Image 4",
-          filename: "gallery-4.jpg",
-          url: "/Gallery/gallery-4.jpg",
-          alt: "Project overview"
-        },
-        {
-          id: 5,
-          name: "Gallery Image 5",
-          filename: "gallery-5.webp",
-          url: "/Gallery/gallery-5.webp",
-          alt: "Construction progress"
-        },
-        {
-          id: 6,
-          name: "Gallery Image 6",
-          filename: "gallery-6.webp",
-          url: "/Gallery/gallery-6.webp",
-          alt: "Final result"
-        },
-        {
-          id: 7,
-          name: "Gallery Image 7",
-          filename: "gallery-7.webp",
-          url: "/Gallery/gallery-7.webp",
-          alt: "Project showcase"
-        },
-        {
-          id: 8,
-          name: "Gallery Image 8",
-          filename: "gallery-8.jpg",
-          url: "/Gallery/gallery-8.jpg",
-          alt: "Completed work"
         }
       ]);
     } finally {

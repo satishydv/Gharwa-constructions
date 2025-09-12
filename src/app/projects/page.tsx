@@ -9,7 +9,7 @@ const ProjectsPage = () => {
       image: "/project/p-1.jpg",
       title: "Modern Urban Housing Project",
       description: "A sleek residential development featuring sustainable design, smart layouts, and modern amenities for contemporary living.",
-      location: "102.2 Sylhet, Bangladesh",
+      location: "102.2 Sylhet, Ranchi",
       duration: "12-2024/4-2025"
     },
     {
@@ -83,15 +83,14 @@ const ProjectsPage = () => {
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Header Section */}
         <div className="mb-16 mt-16">
-          <div className="flex justify-between items-start mb-8">
+          <div className="flex justify-between items-start mb-7">
             <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-yellow-500 mb-6">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-orange-500 mb-6">
                 Discover Our Completed Projects
               </h1>
               <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
                 Every project we complete is a reflection of our commitment to quality, precision, and client satisfaction. 
-                At Garhwa Construction, we take pride in transforming ideas into built realities - whether it's a modern residence, 
-                commercial complex, or infrastructure development.
+                At Garhwa Construction, we take pride in transforming ideas into built reality.
               </p>
             </div>
           </div>
