@@ -22,6 +22,14 @@ const font = Poppins({
 export const metadata: Metadata = {
   title: "Gharwa Construction Pvt Ltd",
   description: "Make Your Dream Home With Us",
+  icons: {
+    icon: [
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

@@ -25,9 +25,9 @@ export default function LoginPage() {
       if (response.ok) {
         // Store token in localStorage
         localStorage.setItem('token', data.token);
-        // Redirect to admin gallery page
+        // Redirect to admin dashboard page
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-        window.location.href = `${baseUrl}/admin/gallery/`;
+        window.location.href = `${baseUrl}/admin/dashboard/`;
       } else {
         alert(data.error || 'Login failed');
       }

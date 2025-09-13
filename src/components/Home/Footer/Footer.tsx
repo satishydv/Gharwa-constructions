@@ -65,11 +65,11 @@ const Footer = () => {
                 <h1 className='text-lg font-bold text-white'>Contact us</h1>
                 <div className='mt-6'>
                    <h1 className='text-lg font-bold text-white'>Our Mobile Number</h1>
-                     <p className='text-black font-medium'>+91 9939129921</p>
+                     <p className='text-black dark:text-white font-medium'>+91 9939129921</p>
                 </div>
                 <div className='mt-6'>
                    <h1 className='text-lg font-bold text-white'>Our Email</h1>
-                     <p className='text-black font-medium'>gharwadevelopment@gmail.com
+                     <p className='text-black dark:text-white font-medium'>gharwadevelopment@gmail.com
                         </p>
                         </div>
 
