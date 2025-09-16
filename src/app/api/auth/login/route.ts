@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const user = users[0] as any;
+      const user = users[0] as { id: string; username: string; email: string; password_hash: string };
 
       // Verify password
       const isPasswordValid = await bcrypt.compare(password, user.password_hash);

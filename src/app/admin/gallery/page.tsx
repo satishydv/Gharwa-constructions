@@ -30,17 +30,17 @@ export default function AdminGalleryPage() {
       if (response.ok) {
         const data = await response.json();
         // Filter out images with empty URLs and add fallback URLs
-        const processedData = data.map((image: any) => ({
+        const processedData = data.map((image: { url?: string; filename: string; alt?: string; name?: string }) => ({
           ...image,
           url: image.url || `/Gallery/${image.filename}`,
           alt: image.alt || image.name || 'Gallery image'
-        })).filter((image: any) => image.filename); // Only include images with filenames
+        })).filter((image: { filename: string }) => image.filename); // Only include images with filenames
         
         setGalleryImages(processedData);
         
         // Clear browser cache for gallery images to show updated versions
         const timestamp = Date.now();
-        const processedDataWithCacheBust = processedData.map((image: any) => ({
+        const processedDataWithCacheBust = processedData.map((image: { url: string; filename: string }) => ({
           ...image,
           url: image.url + '?v=' + timestamp
         }));

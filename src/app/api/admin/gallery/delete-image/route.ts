@@ -17,9 +17,9 @@ async function verifyAdminToken(request: NextRequest) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -57,8 +57,8 @@ export async function DELETE(request: NextRequest) {
         { message: 'Image deleted successfully', filename },
         { status: 200 }
       );
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
         // File doesn't exist
         console.log(`Image file not found: ${imagePath}`);
         return NextResponse.json(

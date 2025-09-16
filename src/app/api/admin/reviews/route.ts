@@ -25,9 +25,9 @@ async function verifyAdminAuth(request: NextRequest) {
   const token = authHeader.substring(7);
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
     return { user: decoded };
-  } catch (jwtError) {
+  } catch {
     return { error: 'Invalid or expired token', status: 401 };
   }
 }
@@ -56,8 +56,8 @@ export async function GET(request: NextRequest) {
       const offset = (page - 1) * limit;
 
       // Build the base query
-      let baseQuery = 'SELECT * FROM reviews';
-      let countQuery = 'SELECT COUNT(*) as total FROM reviews';
+      const baseQuery = 'SELECT * FROM reviews';
+      const countQuery = 'SELECT COUNT(*) as total FROM reviews';
       const whereClause = status ? ' WHERE status = ?' : '';
       
       // Build final queries
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
 
       const [reviews] = await connection.execute(query, params);
       const [countResult] = await connection.execute(finalCountQuery, countParams);
-      const total = (countResult as any)[0].total;
+      const total = (countResult as { total: number }[])[0].total;
 
       console.log('Reviews found:', reviews);
       console.log('Total count:', total);
@@ -145,7 +145,7 @@ export async function PUT(request: NextRequest) {
         [status, id]
       );
 
-      if ((result as any).affectedRows === 0) {
+      if ((result as { affectedRows: number }).affectedRows === 0) {
         await connection.end();
         return NextResponse.json(
           { error: 'Review not found' },

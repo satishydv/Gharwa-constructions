@@ -25,9 +25,9 @@ async function verifyAdminToken(request: NextRequest) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       let totalCleaned = 0;
 
       // For each duplicate filename, keep the first (lowest ID) and delete the rest
-      for (const duplicate of duplicates as any[]) {
+      for (const duplicate of duplicates as { filename: string; count: number; ids: string }[]) {
         const ids = duplicate.ids.split(',').map((id: string) => parseInt(id.trim()));
         const keepId = ids[0]; // Keep the first (oldest) record
         const deleteIds = ids.slice(1); // Delete the rest

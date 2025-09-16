@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           message: 'Review submitted successfully! It will be reviewed before being published.',
-          reviewId: (result as any).insertId
+          reviewId: (result as { insertId: number }).insertId
         },
         { status: 201 }
       );

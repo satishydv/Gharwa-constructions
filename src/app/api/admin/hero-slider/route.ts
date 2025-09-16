@@ -27,9 +27,9 @@ async function verifyAdminToken(request: NextRequest) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -74,11 +74,11 @@ export async function DELETE(request: NextRequest) {
         );
       }
 
-      const image = rows[0] as any;
+      const image = rows[0] as { filename: string };
       const filename = image.filename;
 
       // Delete from database
-      const [deleteResult] = await connection.execute(
+      await connection.execute(
         'DELETE FROM hero_images WHERE id = ?',
         [id]
       );

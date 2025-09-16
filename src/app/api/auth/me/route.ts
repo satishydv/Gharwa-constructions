@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
     // Verify JWT token
     let decoded;
     try {
-      decoded = jwt.verify(token, JWT_SECRET) as any;
-    } catch (jwtError) {
+      decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
+    } catch {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
         { status: 401 }
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      const user = users[0] as any;
+      const user = users[0] as { id: string; username: string; email: string; created_at: string };
 
       await connection.end();
 

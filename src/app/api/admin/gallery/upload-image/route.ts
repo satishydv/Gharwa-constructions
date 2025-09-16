@@ -27,9 +27,9 @@ async function verifyAdminToken(request: NextRequest) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; username: string; email: string };
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
 
         if (Array.isArray(existingResult) && existingResult.length > 0) {
           // Update existing record by filename
-          const existingImage = existingResult[0] as any;
+          const existingImage = existingResult[0] as { id: number };
           imageId = existingImage.id;
           
           await connection.execute(
@@ -144,14 +144,14 @@ export async function POST(request: NextRequest) {
           const [orderResult] = await connection.execute(
             'SELECT COALESCE(MAX(display_order), 0) + 1 as next_order FROM gallery_images'
           );
-          const nextOrder = (orderResult as any)[0]?.next_order || 1;
+          const nextOrder = (orderResult as { next_order: number }[])[0]?.next_order || 1;
 
           const [result] = await connection.execute(
             'INSERT INTO gallery_images (name, filename, alt_text, display_order, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())',
             [name, filename, alt, nextOrder, true]
           );
 
-          const insertResult = result as any;
+          const insertResult = result as { insertId: number };
           imageId = insertResult.insertId;
           console.log(`Created new gallery image: ${filename}`);
         }

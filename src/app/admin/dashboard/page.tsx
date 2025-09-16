@@ -7,7 +7,6 @@ import {
   Eye, 
   Clock,
   TrendingUp,
-  Users,
   Image as ImageIcon,
   Sliders
 } from "lucide-react";
@@ -49,10 +48,10 @@ export default function DashboardPage() {
         if (reviewsResponse.ok) {
           const reviews = reviewsData.reviews || [];
           const totalReviews = reviews.length;
-          const activeReviews = reviews.filter((r: any) => r.status === 'active').length;
-          const pendingReviews = reviews.filter((r: any) => r.status === 'pending').length;
+          const activeReviews = reviews.filter((r: { status: string }) => r.status === 'active').length;
+          const pendingReviews = reviews.filter((r: { status: string }) => r.status === 'pending').length;
           const averageRating = reviews.length > 0 
-            ? (reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length).toFixed(1)
+            ? (reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length).toFixed(1)
             : 0;
 
           setStats(prev => ({
@@ -60,7 +59,7 @@ export default function DashboardPage() {
             totalReviews,
             activeReviews,
             pendingReviews,
-            averageRating: parseFloat(averageRating)
+            averageRating: parseFloat(averageRating.toString())
           }));
         }
 
@@ -157,13 +156,13 @@ export default function DashboardPage() {
       {/* Fixed Header - positioned to not overlap with sidebar - Hidden on mobile */}
       <div className="hidden lg:block bg-gray-50  fixed top-0 left-64 right-0 z-[200] p-6 border-b border-gray-300">
         <h1 className="text-3xl font-bold text-orange-500 mb-2">Dashboard</h1>
-        <p className="text-gray-600">welcome to your admin dashboard. Here's an overview of your website content.</p>
+        <p className="text-gray-600">welcome to your admin dashboard. Here&apos;s an overview of your website content.</p>
       </div>
 
       {/* Mobile Header - visible only on mobile */}
       <div className="lg:hidden p-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome to your admin dashboard. Here's an overview of your website content.</p>
+        <p className="text-gray-600">Welcome to your admin dashboard. Here&apos;s an overview of your website content.</p>
       </div>
 
       {/* Main Content with responsive top padding */}

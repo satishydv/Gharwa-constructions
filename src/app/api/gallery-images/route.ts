@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
 // Database connection configuration
@@ -21,7 +21,7 @@ export async function GET() {
     await connection.end();
     
     // Add URL field to each image based on filename and convert boolean fields
-    const imagesWithUrl = Array.isArray(rows) ? rows.map((image: any) => ({
+    const imagesWithUrl = Array.isArray(rows) ? (rows as { filename: string; alt_text?: string; name?: string; is_active: number }[]).map((image) => ({
       ...image,
       url: `/Gallery/${image.filename}`,
       alt: image.alt_text || image.name || 'Gallery image',
