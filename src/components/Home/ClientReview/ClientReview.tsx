@@ -90,6 +90,15 @@ const ClientReview = () => {
         rating: 5,
         profile_image: "/images/c3.png",
         created_at: new Date().toISOString()
+    },
+    {
+        id: 4,
+        name: "Pranjal Srivastava",
+        subject: "Highly Recommend",
+        message: "Great company to work with. They are very professional and they have a great team of engineers and architects.",
+        rating: 5,
+        profile_image: "/images/c3.png",
+        created_at: new Date().toISOString()
     }
   ];
 

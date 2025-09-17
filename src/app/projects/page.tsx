@@ -30,7 +30,7 @@ const ProjectsPage = () => {
     },
     {
       id: 4,
-      image: "/project/p-4.jpg",
+      image: "/project/p-4.jpeg",
       title: "Green Valley Apartment Complex",
       description: "A modern residential development featuring eco-friendly design, premium amenities, and smart home integration.",
       location: "Green Valley District",

@@ -28,18 +28,20 @@ const Hero = () => {
           setImages(data)
         } else {
           console.error('Failed to fetch hero images')
-          // Fallback to hardcoded images if API fails - using actual images from database
+          // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
           setImages([
-            { id: 9, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-            { id: 10, filename: 'istockphoto-1191048206-1024x1024.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' }
+            { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+            { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+            { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
           ])
         }
       } catch (error) {
         console.error('Error fetching hero images:', error)
-        // Fallback to hardcoded images if API fails - using actual images from database
+        // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
         setImages([
-          { id: 9, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-          { id: 10, filename: 'istockphoto-1191048206-1024x1024.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' }
+          { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+          { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+          { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
         ])
       } finally {
         setLoading(false)
