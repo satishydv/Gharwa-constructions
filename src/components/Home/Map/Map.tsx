@@ -16,7 +16,7 @@ const Map = () => {
         <div className="w-full">
           <div className="relative">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1251.390676645786!2d85.44266134033596!3d23.456793861409107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4fb7a800b7671%3A0xd18b8aef255bd1db!2sALIBROS%20WELFARE%20TRUST!5e0!3m2!1sen!2sin!4v1756787307682!5m2!1sen!2sin" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.6773810218974!2d85.46672077478361!3d23.472098999404558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4fb3f1f1adb2b%3A0xf996dbc9b9b4c540!2sKisaan%20Complex!5e0!3m2!1sen!2sin!4v1758082645636!5m2!1sen!2sin" 
               width="100%" 
               height="600" 
               style={{border:0}} 
