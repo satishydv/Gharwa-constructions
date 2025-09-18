@@ -21,43 +21,56 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGalleryImages = async () => {
-      try {
-        const response = await fetch('/api/gallery-images/')
-        if (response.ok) {
-          const data = await response.json()
-          setGalleryImages(data)
-        } else {
-          console.error('Failed to fetch gallery images')
-          // Fallback to hardcoded images if API fails - using actual images from public/Gallery folder
-          setGalleryImages([
-            { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-            { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-            { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
-            { id: 4, filename: 'gallery-5.webp', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
-            { id: 5, filename: 'gallery-6.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
-            { id: 6, filename: 'gallery-7.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
-            { id: 7, filename: 'p-1.jpg', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' }
-          ])
-        }
-      } catch (error) {
-        console.error('Error fetching gallery images:', error)
-        // Fallback to hardcoded images if API fails - using actual images from public/Gallery folder
-        setGalleryImages([
-          { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-          { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-          { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
-          { id: 4, filename: 'gallery-5.webp', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
-          { id: 5, filename: 'gallery-6.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
-          { id: 6, filename: 'gallery-7.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
-          { id: 7, filename: 'p-1.jpg', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' }
-        ])
-      } finally {
-        setLoading(false)
-      }
-    }
+    // Commented out API call for static build - using fallback values directly
+    // const fetchGalleryImages = async () => {
+    //   try {
+    //     const response = await fetch('/api/gallery-images/')
+    //     if (response.ok) {
+    //       const data = await response.json()
+    //       setGalleryImages(data)
+    //     } else {
+    //       console.error('Failed to fetch gallery images')
+    //       // Fallback to hardcoded images if API fails - using actual images from public/Gallery folder
+    //       setGalleryImages([
+    //         { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 4, filename: 'gallery-5.webp', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 5, filename: 'gallery-6.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 6, filename: 'gallery-7.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 7, filename: 'p-1.jpg', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' }
+    //       ])
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching gallery images:', error)
+    //     // Fallback to hardcoded images if API fails - using actual images from public/Gallery folder
+    //     setGalleryImages([
+    //       { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 4, filename: 'gallery-5.webp', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 5, filename: 'gallery-6.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 6, filename: 'gallery-7.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 7, filename: 'p-1.jpg', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' }
+    //     ])
+    //   } finally {
+    //     setLoading(false)
+    //   }
+    // }
 
-    fetchGalleryImages()
+    // fetchGalleryImages()
+    
+    // Use fallback images directly for static build
+    setGalleryImages([
+      { id: 1, filename: 'gallery-1.jpg', name: 'Gallery 1', alt_text: 'Gallery image 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+      { id: 2, filename: 'gallery-2.jpg', name: 'Gallery 2', alt_text: 'Gallery image 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+      { id: 3, filename: 'gallery-3.jpg', name: 'Gallery 3', alt_text: 'Gallery image 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' },
+      { id: 4, filename: 'gallery-5.webp', name: 'Gallery 4', alt_text: 'Gallery image 4', description: '', display_order: 4, is_active: true, created_at: '', updated_at: '' },
+      { id: 5, filename: 'gallery-6.webp', name: 'Gallery 5', alt_text: 'Gallery image 5', description: '', display_order: 5, is_active: true, created_at: '', updated_at: '' },
+      { id: 6, filename: 'gallery-7.webp', name: 'Gallery 6', alt_text: 'Gallery image 6', description: '', display_order: 6, is_active: true, created_at: '', updated_at: '' },
+      { id: 7, filename: 'p-1.jpg', name: 'Gallery 7', alt_text: 'Gallery image 7', description: '', display_order: 7, is_active: true, created_at: '', updated_at: '' }
+    ])
+    setLoading(false)
   }, [])
 
   const handleImageClick = (index: number) => {

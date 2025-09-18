@@ -10,31 +10,35 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      const response = await fetch(`${apiUrl}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    // Commented out API call for static build - login functionality disabled
+    // try {
+    //   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+    //   const response = await fetch(`${apiUrl}/auth/login`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ username, password }),
+    //   });
 
-      const data = await response.json();
+    //   const data = await response.json();
 
-      if (response.ok) {
-        // Store token in localStorage
-        localStorage.setItem('token', data.token);
-        // Redirect to admin dashboard page
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-        window.location.href = `${baseUrl}/admin/dashboard/`;
-      } else {
-        alert(data.error || 'Login failed');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed. Please try again.');
-    }
+    //   if (response.ok) {
+    //     // Store token in localStorage
+    //     localStorage.setItem('token', data.token);
+    //     // Redirect to admin dashboard page
+    //     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    //     window.location.href = `${baseUrl}/admin/dashboard/`;
+    //   } else {
+    //     alert(data.error || 'Login failed');
+    //   }
+    // } catch (error) {
+    //   console.error('Login error:', error);
+    //   alert('Login failed. Please try again.');
+    // }
+    
+    // For static build - show message that admin functionality is not available
+    alert('Admin functionality is not available in static build. Please deploy with server-side functionality to access admin features.');
   };
 
   return (

@@ -18,9 +18,9 @@ const About = () => {
             {/* Blue accent line */}
             <div className="w-20 h-1 bg-yellow-500 mb-8"></div>
             
-            <div className="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed">
-              <p>
-                <span className="text-yellow-500 font-semibold">Gharwa Development Pvt. Ltd.</span> stands at the forefront of modern construction, focusing on innovative techniques, sustainable materials, and smart building solutions. With a team of experienced engineers, architects, and project managers, we are committed to transforming your vision into reality—be it a single-family home, a luxury villa, or a housing complex.
+            <div className="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed ">
+              <p className='text-justify'>
+                <span className="text-yellow-500 font-semibold">Gharwa Development Pvt. Ltd.</span> stands at the forefront of modern construction, focusing on innovative techniques, sustainable materials, and smart building solutions. With a team of experienced engineers, architects, and project managers, we are committed to transforming your vision into reality—be it a single-family home, a luxury villa, or a housing complex .
               </p>
             </div>
             

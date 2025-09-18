@@ -41,25 +41,30 @@ const ClientReview = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch('/api/reviews');
-        const data = await response.json();
-        
-        if (response.ok) {
-          setReviews(data.reviews || []);
-        } else {
-          setError(data.error || 'Failed to fetch reviews');
-        }
-      } catch (err) {
-        setError('Failed to fetch reviews');
-        console.error('Error fetching reviews:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Commented out API call for static build - using fallback values directly
+    // const fetchReviews = async () => {
+    //   try {
+    //     const response = await fetch('/api/reviews');
+    //     const data = await response.json();
+    //     
+    //     if (response.ok) {
+    //       setReviews(data.reviews || []);
+    //     } else {
+    //       setError(data.error || 'Failed to fetch reviews');
+    //     }
+    //   } catch (err) {
+    //     setError('Failed to fetch reviews');
+    //     console.error('Error fetching reviews:', err);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
-    fetchReviews();
+    // fetchReviews();
+    
+    // Use fallback reviews directly for static build
+    setReviews(fallbackReviews);
+    setLoading(false);
   }, []);
 
   // Fallback data if no reviews are available
@@ -70,7 +75,7 @@ const ClientReview = () => {
         subject: "Great Service!",
         message: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 5,
-        profile_image: "/images/c1.png",
+        profile_image: "/images/3.jpg",
         created_at: new Date().toISOString()
     },
     {
@@ -79,7 +84,7 @@ const ClientReview = () => {
         subject: "Good Experience",
         message: "Gharwa Development Pvt. Ltd. is a great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 4,
-        profile_image: "/images/c2.png",
+        profile_image: "/images/1.jpg",
         created_at: new Date().toISOString()
     },
     {
@@ -88,7 +93,7 @@ const ClientReview = () => {
         subject: "Highly Recommend",
         message: "Great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 5,
-        profile_image: "/images/c3.png",
+        profile_image: "/images/2.jpg",
         created_at: new Date().toISOString()
     },
     {
@@ -97,7 +102,7 @@ const ClientReview = () => {
         subject: "Highly Recommend",
         message: "Great company to work with. They are very professional and they have a great team of engineers and architects.",
         rating: 5,
-        profile_image: "/images/c3.png",
+        profile_image: "/images/3.jpg",
         created_at: new Date().toISOString()
     }
   ];

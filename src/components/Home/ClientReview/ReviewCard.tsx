@@ -16,7 +16,7 @@ const ReviewCard = ({name, heading, review, rating, avatar}: Props) => {
         <div className='flex items-center mt-2'>
         <p className='text-yellow-500'>{"⭐".repeat(rating)}</p>
         </div>
-        <p className='text-gray-800 font-medium dark:text-gray-300 mt-4 flex-grow'>
+        <p className='text-gray-800 font-medium dark:text-gray-300 mt-4 flex-grow text-justify'>
             {review}
         </p>
         <p className='block w-full h-[1px] bg-gray-300 dark:bg-gray:700 mt-6 mb-6'></p>

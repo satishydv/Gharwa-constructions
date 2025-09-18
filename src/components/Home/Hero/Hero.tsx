@@ -20,35 +20,44 @@ const Hero = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchHeroImages = async () => {
-      try {
-        const response = await fetch('/api/hero-images/')
-        if (response.ok) {
-          const data = await response.json()
-          setImages(data)
-        } else {
-          console.error('Failed to fetch hero images')
-          // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
-          setImages([
-            { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-            { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-            { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
-          ])
-        }
-      } catch (error) {
-        console.error('Error fetching hero images:', error)
-        // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
-        setImages([
-          { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
-          { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
-          { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
-        ])
-      } finally {
-        setLoading(false)
-      }
-    }
+    // Commented out API call for static build - using fallback values directly
+    // const fetchHeroImages = async () => {
+    //   try {
+    //     const response = await fetch('/api/hero-images/')
+    //     if (response.ok) {
+    //       const data = await response.json()
+    //       setImages(data)
+    //     } else {
+    //       console.error('Failed to fetch hero images')
+    //       // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
+    //       setImages([
+    //         { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+    //         { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
+    //       ])
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching hero images:', error)
+    //     // Fallback to hardcoded images if API fails - using actual images from public/Hero folder
+    //     setImages([
+    //       { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+    //       { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
+    //     ])
+    //   } finally {
+    //     setLoading(false)
+    //   }
+    // }
 
-    fetchHeroImages()
+    // fetchHeroImages()
+    
+    // Use fallback images directly for static build
+    setImages([
+      { id: 1, filename: 'h.webp', name: 'Construction Site 1', alt_text: 'Construction Site 1', description: '', display_order: 1, is_active: true, created_at: '', updated_at: '' },
+      { id: 2, filename: 'istockphoto-1280697755-612x612.jpg', name: 'Construction Site 2', alt_text: 'Construction site view 2', description: '', display_order: 2, is_active: true, created_at: '', updated_at: '' },
+      { id: 3, filename: 'p-9.jpg', name: 'Construction Site 3', alt_text: 'Construction site view 3', description: '', display_order: 3, is_active: true, created_at: '', updated_at: '' }
+    ])
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -103,24 +112,24 @@ const Hero = () => {
 
           <div className='mt-6 flex flex-wrap items-center gap-3 md:gap-4'>
             <a
-              href='tel:9873824375'
+              href='tel:8340265398'
               className='rounded-md bg-amber-600 px-6 py-3 text-white font-semibold shadow hover:bg-amber-700 transition-colors'
             >
               Call Us
             </a>
 
             <a
-              href='tel:9873824375'
+              href='tel:8340265398'
               className='rounded-md bg-white/10 px-4 py-2 text-white font-semibold backdrop-blur hover:bg-white/15'
             >
-              9873824375
+              8340265398
             </a>
 
             <a
               href='tel:8877096309'
               className='rounded-md bg-white/10 px-4 py-2 text-white font-semibold backdrop-blur hover:bg-white/15'
             >
-              8877096309
+              8210243226
             </a>
           </div>
         </div>

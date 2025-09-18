@@ -21,7 +21,7 @@ const Footer = () => {
                     <h1 className='text-xl hidden sm:block md:text-2xl text-white font-bold'>Gharwa Development</h1>
                    
                 </div>
-                 <p className='mt-4 text-gray-200 font-medium'>
+                 <p className='mt-4 text-gray-200 font-medium text-justify'>
             Gharwa Development is a leading construction company committed to delivering comprehensive building solutions and services. We specialize in transforming.
         </p>
         <div className='mt-4 space-x-4 flex items-center'>
@@ -52,12 +52,12 @@ const Footer = () => {
             </div>
             {/* 3rd part */}
             <div className='space-y-5'>
-                <h1 className='text-lg font-bold text-white'>Resource</h1>
-                <p className='footer_link'>About us</p>
-                <p className='footer_link'>News and Press</p>
-                <p className='footer_link'>Our Customers</p>
-                <p className='footer_link'>Leadership</p>
-                <p className='footer_link'>Carress</p>
+                <h1 className='text-lg font-bold text-white'>Services</h1>
+                <p className='footer_link'>Construction & Building</p>
+                <p className='footer_link'>Residential Project Development</p>
+                <p className='footer_link'>Renovation & Remodeling</p>
+                <p className='footer_link'>Custom Home Construction</p>
+                <p className='footer_link'>Architecture Design</p>
 
             </div>
             {/*4th part  */}
@@ -65,11 +65,12 @@ const Footer = () => {
                 <h1 className='text-lg font-bold text-white'>Contact us</h1>
                 <div className='mt-6'>
                    <h1 className='text-lg font-bold text-white'>Our Mobile Number</h1>
-                     <p className='text-black dark:text-white font-medium'>+91 9939129921</p>
+                     <p className='text-black dark:text-white font-medium'>+91 8340265398</p>
+                     <p className='text-black dark:text-white font-medium'>+91 8210243226</p>
                 </div>
                 <div className='mt-6'>
                    <h1 className='text-lg font-bold text-white'>Our Email</h1>
-                     <p className='text-black dark:text-white font-medium'>gharwadevelopment@gmail.com
+                     <p className='text-black dark:text-white font-medium'>support@gharwadevelopment.com
                         </p>
                         </div>
 
